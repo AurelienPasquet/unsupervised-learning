@@ -14,8 +14,9 @@ from tqdm.auto import tqdm
 ##################################################################
 # Exemple :  k-Means Clustering
 
-path = '../artificial/'
-name = "banana.arff"
+path = './artificial/'
+name = "cure-t0-2000n-2D.arff"
+n_centers = 20
 
 # Load raw data
 databrut = arff.loadarff(open(path+str(name), 'r'))
@@ -40,7 +41,6 @@ model_metrics = {
     for mode in ["normal", "mini-batch"]
 }
 
-n_centers = 20
 n_start = 2 # Silhouette score works with 2+ centers
 
 # Training and collecting data from models with i clusters

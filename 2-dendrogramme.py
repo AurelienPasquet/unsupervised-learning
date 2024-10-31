@@ -12,8 +12,9 @@ from tqdm.auto import tqdm
 ##################################################################
 # Exemple :  Dendrogramme and Agglomerative Clustering
 
-path = '../artificial/'
+path = './artificial/'
 name="2d-4c-no4.arff"
+n_clusters = 30
 
 # Load raw data
 databrut = arff.loadarff(open(path+str(name), 'r'))
@@ -67,8 +68,6 @@ models_metrics = {
     for linkage in linkages
 }
 
-n_clusters = 30
-
 for i in tqdm(range(2, n_clusters+1)): # Silhouette score works with 2+ centers
     for linkage in models_metrics:
         start_time = time.time()
@@ -81,18 +80,32 @@ for i in tqdm(range(2, n_clusters+1)): # Silhouette score works with 2+ centers
 
 # Plot silhouette scores and runtimes for each linkage
 centers = [i for i in range(2, n_clusters+1)]
-rows = len(models_metrics)
+
+rows = 1
 cols = len(models_metrics["ward"]["metrics"])
-plt.figure(figsize=(10, 8))
-for i, linkage in enumerate(models_metrics.keys()):
-    for j, metric in enumerate(models_metrics[linkage]["metrics"].keys()):
-        plt.subplot(rows, cols, i*cols + j + 1)
-        plt.title(f"{metric} ({linkage})")
-        plt.plot(centers, models_metrics[linkage]["metrics"][metric], marker='o', linestyle="-")
-        plt.xlabel("centers")
-        plt.ylabel(metric)
+
+plt.figure(figsize=(12, 6))
+for i, metric in enumerate(models_metrics["ward"]["metrics"].keys()):
+    plt.subplot(rows, cols, i + 1)
+    for j, linkage in enumerate(models_metrics.keys()):
+        plt.plot(centers, models_metrics[linkage]["metrics"][metric], marker='o', linestyle='-', label=linkage)
+    plt.title(metric)
+    plt.xlabel("centers")
+    plt.ylabel(metric)
+    plt.legend()
 plt.tight_layout()
 plt.show()
+    
+# plt.figure(figsize=(10, 8))
+# for i, linkage in enumerate(models_metrics.keys()):
+#     for j, metric in enumerate(models_metrics[linkage]["metrics"].keys()):
+#         plt.subplot(rows, cols, i*cols + j + 1)
+#         plt.title(f"{metric} ({linkage})")
+#         plt.plot(centers, models_metrics[linkage]["metrics"][metric], marker='o', linestyle="-")
+#         plt.xlabel("centers")
+#         plt.ylabel(metric)
+# plt.tight_layout()
+# plt.show()
 
 # Get best linkage and best model
 best_linkage = max(models_metrics, key=lambda linkage: models_metrics[linkage]["metrics"]["silhouette"])

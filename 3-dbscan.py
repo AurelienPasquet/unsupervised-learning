@@ -13,8 +13,11 @@ from tqdm.auto import tqdm
 # Exemple : DBSCAN Clustering
 
 
-path = '../artificial/'
+path = './artificial/'
 name="banana.arff"
+# Measurements with epsilon from 0.05 to 0.95
+epsilon = [i/20 for i in range(1, 20)]
+print(type(epsilon))
 
 # Load raw data
 databrut = arff.loadarff(open(path+str(name), 'r'))
@@ -31,9 +34,9 @@ f1 = datanp[:,1] # tous les éléments de la deuxième colonne
 print("------------------------------------------------------")
 print("Appel DBSCAN (1) ... ")
 tps1 = time.time()
-epsilon=2 #2  # 4
+epsilon_=2 #2  # 4
 min_pts= 5 #10   # 10
-model = cluster.DBSCAN(eps=epsilon, min_samples=min_pts)
+model = cluster.DBSCAN(eps=epsilon_, min_samples=min_pts)
 model.fit(datanp)
 tps2 = time.time()
 labels = model.labels_
@@ -65,9 +68,6 @@ models_metrics = {
         "runtime": []
     }
 }
-
-# Measurements for epsilon from 0.05 to 0.95
-epsilon = [i/20 for i in range(1, 20)]
 
 for e in tqdm(epsilon):
     start_time = time.time()
