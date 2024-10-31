@@ -17,7 +17,6 @@ path = './artificial/'
 name="banana.arff"
 # Measurements with epsilon from 0.05 to 0.95
 epsilon = [i/20 for i in range(1, 20)]
-print(type(epsilon))
 
 # Load raw data
 databrut = arff.loadarff(open(path+str(name), 'r'))
